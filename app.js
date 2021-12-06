@@ -6,9 +6,10 @@ const mongoose = require("mongoose");
 const path = require("path");
 
 // internal import
-
 const loginRouter = require("./router/loginRouter");
 const usersRouter = require("./router/usersRouter");
+const inboxRouter = require("./router/inboxRouter");
+
 const {
   notFoundHandler,
   errorHandler,
@@ -47,7 +48,7 @@ app.use(express.static(path.join(__dirname, "public")));
 
 app.use("/", loginRouter);
 app.use("/users", usersRouter);
-// app.use("/inbox", inboxRouter);
+app.use("/inbox", inboxRouter);
 
 // 404 handlers
 app.use(notFoundHandler);
