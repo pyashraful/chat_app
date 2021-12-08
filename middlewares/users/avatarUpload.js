@@ -5,6 +5,20 @@ function avatarUpload(req, res, next) {
     1000000,
     "only .jpg, jpge or .png files are allowed"
   );
+
+  upload.any(req, res, (err) => {
+    if (err) {
+      res.status(500).json({
+        error: {
+          avatar: {
+            msg: err.message,
+          },
+        },
+      });
+    } else {
+      next();
+    }
+  });
 }
 
 module.exports = avatarUpload;
