@@ -1,0 +1,68 @@
+<div class="modal-wrapper" id="add-user-modal">
+  <div class="modal">
+    <a href="#" onclick="closeModal()" class="modal-close">+</a>
+    <div class="modal-title">
+      <h2>Create New User</h2>
+    </div>
+    <div class="modal-body">
+      <form
+        id="add-user-form"
+        method="post"
+        action="/users"
+        enctype="multipart/form-data"
+      >
+        <input type="text" placeholder="enter name" name="name" />
+        <p class="error name-error"></p>
+
+        <input type="text" placeholder="enter email" name="email" />
+        <p class="error email-error"></p>
+
+        <input type="text" placeholder="enter mobile" name="mobile" />
+        <p class="error moblie-error"></p>
+
+        <input type="password" placeholder="enter password" name="password" />
+        <p class="error password-error"></p>
+
+        <input type="file" name="avatar" />
+        <p class="error avatar-error"></p>
+
+        <p class="error file-error"></p>
+
+        <input type="submit" value="Submit" />
+      </form>
+    </div>
+  </div>
+</div>
+<script>
+  const modal = document.querySelector("#add-user-modal");
+  const from = document.querySelector("#add-user-form");
+  function closeModal() {
+    modal.style.display = "none";
+  }
+  function openModal() {
+    modal.style.display = "block";
+  }
+
+  from.onsubmit = async function (event) {
+    event.preventDefault();
+
+    const fromdata = new FromData(from);
+
+    let response = await fetch("/users", {
+      method: "POST",
+      body: fromdata,
+    });
+
+    let result = await response.json();
+
+    if (result.error) {
+      Object.keys(result.error).forEach((fieldName) => {
+        from[fieldName].classlist.add("error");
+
+        const errorPlaceholder = document.querySelector(`${fieldName}-error`);
+        errorPlaceholder.textcontent = result.error[fieldName].msg;
+        errorPlaceholder.style.display = "block";
+      });
+    }
+  };
+</script>
