@@ -55,11 +55,22 @@ function addUserValidationHendler(req, res, next) {
   } else {
     if (req.files.length > 0) {
       const fileName = req.files[0];
-      unlink(path.join(__dirname, `/../public/uploads/avatars/${fileName}`));
+      unlink(
+        path.join(__dirname, `/../public/uploads/avatars/${fileName}`),
+        (err) => {
+          if (err) {
+            console.error(err);
+          }
+        }
+      );
     }
+    res.status(500).json({
+      error: mappedErrors,
+    });
   }
 }
 
 module.exports = {
   addUserValidator,
+  addUserValidationHendler,
 };
