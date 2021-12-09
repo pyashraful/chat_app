@@ -1,3 +1,5 @@
+const uploader = require("../../utilities/singleFileUploader");
+
 function avatarUpload(req, res, next) {
   const upload = uploader(
     "avatars",
@@ -6,8 +8,9 @@ function avatarUpload(req, res, next) {
     "only .jpg, jpge or .png files are allowed"
   );
 
-  upload.any(req, res, (err) => {
+  upload.any()(req, res, (err) => {
     if (err) {
+      console.error(err);
       res.status(500).json({
         error: {
           avatar: {

@@ -1,7 +1,8 @@
-const { check } = require("express-validator");
+const { check, validationResult } = require("express-validator");
 const createError = require("http-errors");
 const path = require("path");
 const { unlink } = require("fs");
+const User = require("../../models/peopleModel");
 
 const addUserValidator = [
   check("name")
@@ -27,7 +28,7 @@ const addUserValidator = [
     }),
 
   check("mobile")
-    .isMobilePhone("bn-BD", { strictMode: true })
+    .isMobilePhone("bn-BD")
     .withMessage("Moblie number must be a valid bangladeshi mobile number")
     .custom(async (value) => {
       try {
@@ -49,8 +50,10 @@ const addUserValidator = [
 
 function addUserValidationHendler(req, res, next) {
   const errors = validationResult(req);
+  console.error(errors);
   const mappedErrors = errors.mapped();
   if (Object.keys(mappedErrors).length === 0) {
+    console.error(errors);
     next();
   } else {
     if (req.files.length > 0) {
@@ -64,10 +67,10 @@ function addUserValidationHendler(req, res, next) {
         }
       );
     }
-    res.status(500).json({
-      error: mappedErrors,
-    });
   }
+  res.status(500).json({
+    error: mappedErrors,
+  });
 }
 
 module.exports = {

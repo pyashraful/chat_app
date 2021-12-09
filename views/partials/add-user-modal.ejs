@@ -35,7 +35,12 @@
 </div>
 <script>
   const modal = document.querySelector("#add-user-modal");
-  const from = document.querySelector("#add-user-form");
+  const form = document.querySelector("#add-user-form");
+  const successToast = Toastify({
+    text: "User was added successfully! Reloading the list...",
+    duration: 1000,
+  });
+
   function closeModal() {
     modal.style.display = "none";
   }
@@ -43,26 +48,58 @@
     modal.style.display = "block";
   }
 
-  from.onsubmit = async function (event) {
+  form.onsubmit = async function (event) {
     event.preventDefault();
+    // clear errors first
+    console.log("onsubmit");
+    const errorPlaceholders = document.querySelectorAll("p.error");
+    for (let i = 0; i < errorPlaceholders.length; i++) {
+      errorPlaceholders[i].style.display = "none";
+    }
 
-    const fromdata = new FromData(from);
+    const inputErrors = document.querySelectorAll("input.error");
+    if (inputErrors.length > 0) {
+      for (let j = 0; j < inputErrors.length; j++) {
+        inputErrors[j].classList.remove("error");
+      }
+    }
+
+    // const formData = new FormData(from);
+    const formData = new FormData(form);
+
+    console.dir(formData);
 
     let response = await fetch("/users", {
       method: "POST",
-      body: fromdata,
+      body: formData,
     });
 
+    // let response = await fetch("/users", {
+    //   method: "POST",
+    //   body: fromData,
+    // });
+
     let result = await response.json();
+    console.dir(result);
 
     if (result.error) {
       Object.keys(result.error).forEach((fieldName) => {
-        from[fieldName].classlist.add("error");
+        form[fieldName].classList.add("error");
 
-        const errorPlaceholder = document.querySelector(`${fieldName}-error`);
-        errorPlaceholder.textcontent = result.error[fieldName].msg;
+        const errorPlaceholder = document.querySelector(`.${fieldName}-error`);
+        errorPlaceholder.textContent = result.error[fieldName].msg;
         errorPlaceholder.style.display = "block";
       });
+    } else {
+      // success
+      successToast.showToast();
+      closeModal();
+      document.querySelector("p.error").style.display = "none";
+
+      // reload the page after 1 second
+      setTimeout(() => {
+        location.reload();
+      }, 1000);
     }
   };
 </script>
