@@ -1,5 +1,9 @@
 const express = require("express");
-const { getUsers, addUsser } = require("../controller/userscontroller");
+const {
+  getUsers,
+  addUsser,
+  removeUser,
+} = require("../controller/userscontroller");
 const decoratedHtmlResponse = require("../middlewares/common/decorateHtmlResponse");
 const avatarUpload = require("../middlewares/users/avatarUpload");
 const {
@@ -17,5 +21,6 @@ router.post(
   addUserValidationHendler,
   addUsser
 );
+router.delete("/:id", removeUser);
 
 module.exports = router;
