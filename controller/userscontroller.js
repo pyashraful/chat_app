@@ -3,8 +3,13 @@ const bcrypt = require("bcrypt");
 // internal import
 const User = require("../models/peopleModel");
 
-function getUsers(req, res, next) {
-  res.render("users");
+async function getUsers(req, res, next) {
+  try {
+    const users = await User.find();
+    res.render("users", { users });
+  } catch (err) {
+    next(err);
+  }
 }
 
 async function addUsser(req, res, next) {
