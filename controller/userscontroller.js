@@ -25,9 +25,13 @@ async function addUsser(req, res, next) {
   }
 
   try {
-    const result = await awaitnewUser.save();
+    console.log("adding");
+    const result = await newUser.save();
+    console.log("added");
     res.status(200).json({ message: "User was added successfully " });
+    console.log("send ...");
   } catch (err) {
+    console.log(err);
     res.status(500).json({
       error: {
         common: {

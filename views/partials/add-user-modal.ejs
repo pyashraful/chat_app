@@ -18,7 +18,7 @@
         <p class="error email-error"></p>
 
         <input type="text" placeholder="enter mobile" name="mobile" />
-        <p class="error moblie-error"></p>
+        <p class="error mobile-error"></p>
 
         <input type="password" placeholder="enter password" name="password" />
         <p class="error password-error"></p>
@@ -82,12 +82,12 @@
     let result = await response.json();
     console.dir(result);
 
-    if (result.error) {
-      Object.keys(result.error).forEach((fieldName) => {
+    if (result.errors) {
+      Object.keys(result.errors).forEach((fieldName) => {
+        console.log(fieldName);
         form[fieldName].classList.add("error");
-
         const errorPlaceholder = document.querySelector(`.${fieldName}-error`);
-        errorPlaceholder.textContent = result.error[fieldName].msg;
+        errorPlaceholder.textContent = result.errors[fieldName].msg;
         errorPlaceholder.style.display = "block";
       });
     } else {

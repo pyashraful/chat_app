@@ -50,10 +50,8 @@ const addUserValidator = [
 
 function addUserValidationHendler(req, res, next) {
   const errors = validationResult(req);
-  console.error(errors);
   const mappedErrors = errors.mapped();
   if (Object.keys(mappedErrors).length === 0) {
-    console.error(errors);
     next();
   } else {
     if (req.files.length > 0) {
@@ -67,10 +65,11 @@ function addUserValidationHendler(req, res, next) {
         }
       );
     }
+    res.status(500).json({
+      errors: mappedErrors,
+      message: "error from user_validator",
+    });
   }
-  res.status(500).json({
-    error: mappedErrors,
-  });
 }
 
 module.exports = {

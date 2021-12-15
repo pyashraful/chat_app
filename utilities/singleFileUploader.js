@@ -1,4 +1,6 @@
 const multer = require("multer");
+const path = require("path");
+const createError = require("http-errors");
 
 function uploader(subfolderPath, allowed_file_type, max_size, error_message) {
   const UPLOAD_FOLDER = `${__dirname}/../public/uploads/${subfolderPath}/`;
@@ -30,7 +32,7 @@ function uploader(subfolderPath, allowed_file_type, max_size, error_message) {
       if (allowed_file_type.includes(file.mimetype)) {
         cb(null, true);
       } else {
-        cb(createError(error_msg));
+        cb(createError(error_message));
       }
     },
   });
