@@ -51,7 +51,7 @@ async function addUsser(req, res, next) {
 
 async function removeUser(req, res) {
   try {
-    const user = await User.findByIdAndRemove({ id: req.params.id });
+    const user = await User.findByIdAndRemove({ _id: req.params.id });
     if (user.avatar) {
       unlink(
         path.join(__dirname, `/../public/uploads/avatars/${user.avatar}`),
