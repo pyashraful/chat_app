@@ -48,17 +48,17 @@ async function loginUser(req, res, next) {
     }
   } catch (err) {
     console.log(err);
-    res.render(
-      "index",
-      { userName: req.body.username },
-      {
-        errors: {
-          common: {
-            msg: err.message,
-          },
+    res.render("index", {
+      data: {
+        username: req.body.username,
+      },
+
+      errors: {
+        common: {
+          msg: err.message,
         },
-      }
-    );
+      },
+    });
   }
 }
 
